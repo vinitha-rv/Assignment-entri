@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Calculator</title>
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #eca5dd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    
+    }
+    .calculator {
+      width: 350px;
+      padding: 20px;
+      background: #8308ca81;
+      border-radius: 18px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .display {
+      width: 320px;
+      height: 70px;
+      background: #2c2a2a;
+      font-size: 2rem;
+      text-align: right;
+      padding: 10px;
+      border: 1px solid #ebdfdf;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      color: #f0d8d8;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    button {
+      height: 60px;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background: #727071;
+     
+     
+    }
+    button:active {
+      background: #a19494;
+    }
+    button.operator {
+      background: #1b1b1b;
+      color: white;
+    }
+    button.operator:active {
+      background: #3d3c3a;
+    }
+    button.clear {
+      background: #7506a8;
+      color: white;
+    }
+    button.clear:active {
+      background: #92699b;
+    }
+    button.equal {
+      background: hsl(278, 95%, 34%);
+      color: white;
+      
+    }
+    button.equal:active {
+      background: #4a4e4a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+  <div class="calculator">
+    <input type="text" id="display" class="display" disabled />
+    <div class="buttons">
+      <button class="clear">AC</button>
+      <button class="operator" data-operator="/">÷</button>
+      <button class="operator" data-operator="*">×</button>
+      <button class="operator" data-operator="-">−</button>
+      
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button class="operator" data-operator="+">+</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button class="operator" data-operator="+/-">+/-</button>
+ 
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button class="operator" data-operator="%">%</button>
+      <button>0</button>
+      <button>.</button>
+      <button>00</button>
+      <button class="equal">=</button>
+     
+
+    </div>
+  </div>
+
+  <script>
+   
+    const display = document.getElementById("display");
+    const buttons = document.querySelectorAll("button");
+
+    let currentInput = "";
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const { classList, dataset, textContent } = button;
+
+        if (classList.contains("clear")) {
+          clearDisplay();
+        } else if (classList.contains("equal")) {
+          calculate();
+        } else if (classList.contains("operator")) {
+          addOperator(dataset.operator);
+        } else {
+          addNumber(textContent);
+        }
+      });
+    });
+
+    
+    function addNumber(number) {
+      currentInput += number;
+      updateDisplay();
+    }
+
+    function addOperator(operator) {
+      if (currentInput === "" || /[+\-*/]$/.test(currentInput)) return; 
+      currentInput += operator;
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      currentInput = "";
+      updateDisplay();
+    }
+
+    function calculate() {
+      try {
+        currentInput = eval(currentInput.replace(/×/g, "*").replace(/÷/g, "/")).toString();
+        updateDisplay();
+      } catch (error) {
+        currentInput = "Error";
+        updateDisplay();
+        setTimeout(clearDisplay, 1000); 
+      }
+    }
+
+    function updateDisplay() {
+      display.value = currentInput;
+    }
+  </script>
+</body>
+</html>
